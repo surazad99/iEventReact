@@ -4,7 +4,7 @@ import NoteContext from "./noteContext";
 const NoteState = (props) => {
   const host = process.env.REACT_APP_API_HOST;
   const [notes, setNotes] = useState([]);
-
+  
   //Get All Notes
   const getNotes = async (filterBy="all") => {
     //Api call
@@ -19,6 +19,7 @@ const NoteState = (props) => {
     });
     const data = await response.json();
     setNotes(data.data);
+    return response;
   };
   //Add Note
   const addNote = async (title, description, start_date, end_date) => {

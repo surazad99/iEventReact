@@ -10,12 +10,21 @@ const Notes = (props) => {
   const context = useContext(noteContext);
   const { notes, getNotes, editNote } = context;
   const navigate = useNavigate();
-  useEffect(() => {
+
+  useEffect(()  => {
+
+    async function fetchData(){
     if(localStorage.getItem('token')){
-      getNotes();
+      const response = await getNotes();
+      if(response.status === 401){
+        localStorage.removeItem('token');
+        navigate("/login");
+      }
     }else{
       navigate("/login");
     }
+    }
+    fetchData();
     // eslint-disable-next-line
   }, []);
   const ref = useRef(null);
@@ -32,7 +41,7 @@ const Notes = (props) => {
     event.preventDefault();
     const response = await editNote(note.id, note.title, note.description, note.start_date, note.end_date);
     const responseJson = await response.json();
-    if(response.status==200){
+    if(response.status===200){
       props.showAlert('success', responseJson.message);
     }
     closeRef.current.click();
