@@ -1,11 +1,22 @@
-# Getting Started with Create React App
+# Getting Started with I Event React APP
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was created with React
 
-## Available Scripts
+## Projet Setup
+Clone the repository from master branch
 
-In the project directory, you can run:
+RUN
+### `npm install`
+Installs necessary packages using npm
 
+### `cp .env.example .env.local`
+Copies example env file into your env file\
+
+### `Setup your api host`
+change your api host in .env.local using\
+REACT_APP_API_HOST=\
+
+Run the application on yout local machine 
 ### `npm start`
 
 Runs the app in the development mode.\
@@ -13,6 +24,13 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
+
+### `Login into the app`
+Login using following credentials or you can sign up anytime\
+email:user@gmail.com\
+password:User@12345
+
+### `Enjoy the application`
 
 ### `npm test`
 
