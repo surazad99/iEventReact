@@ -25,6 +25,11 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
+### `Login into the app`
+Login using following credentials or you can sign up anytime\
+email:user@gmail.com\
+password:User@12345
+
 ### `Enjoy the application`
 
 ### `npm test`
