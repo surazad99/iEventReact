@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react";
-import { json } from "react-router-dom";
 import noteContext from "../context/noteContext";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const AddNote = (props) => {
   const context = useContext(noteContext);
   const { notes, setNotes, addNote } = context;
-  const [note, setNote] = useState({title: "", description: "", start_date: "", end_date: ""});
-
+  const [note, setNote] = useState({title: "", description: "", start_date: new Date().toISOString().split('T')[0], end_date: new Date().toISOString().split('T')[0]});
   const handleSubmit = async (event) => {
     event.preventDefault();
     const response = await addNote(note.title, note.description, note.start_date, note.end_date);
@@ -14,7 +14,7 @@ const AddNote = (props) => {
     if(response.status === 200){
       setNotes(notes.concat(apiResponse.data));
       props.showAlert('success', apiResponse.message);
-      setNote({title: "", description: "", start_date: "", end_date:""});
+      setNote({title: "", description: "", start_date: new Date().toISOString().split('T')[0], end_date:new Date().toISOString().split('T')[0]});
 
     }else if(response.status === 422){
       props.showAlert('danger', apiResponse.message);
@@ -45,6 +45,7 @@ const AddNote = (props) => {
               name="title"
               onChange={handleOnchange}
               value={note.title}
+              required
             />
             </div>
           </div>
@@ -60,6 +61,7 @@ const AddNote = (props) => {
               name="description"
               onChange={handleOnchange}
               value={note.description}
+              required
 
             />
             </div>
@@ -70,14 +72,7 @@ const AddNote = (props) => {
             <label htmlFor="start_date" className="form-label">
               Start Date
             </label>
-            <input
-              type="date"
-              className="form-control"
-              id="start_date"
-              name="start_date"
-              onChange={handleOnchange}
-              value={note.start_date}
-            />
+            <DatePicker  minDate={new Date()} selected={new Date(note.start_date)} onChange={(date) => setNote({...note, start_date: date.toISOString().split('T')[0]})} />
             </div>
           </div>
           <div className="col-md-6">
@@ -85,14 +80,7 @@ const AddNote = (props) => {
             <label htmlFor="end_date" className="form-label">
               End Date
             </label>
-            <input
-              type="date"
-              className="form-control"
-              id="end_date"
-              name="end_date"
-              onChange={handleOnchange}
-              value={note.end_date}
-            />
+            <DatePicker minDate={new Date(note.start_date)}  selected={new Date(note.end_date)} onChange={(date) => setNote({...note, end_date: date.toISOString().split('T')[0]})} />
             </div>
           </div>
         </div>

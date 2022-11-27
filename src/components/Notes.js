@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import noteContext from "../context/noteContext";
 import AddNote from "./AddNote";
 import NoteItem from "./NoteItem";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Notes = (props) => {
   const context = useContext(noteContext);
@@ -19,7 +21,7 @@ const Notes = (props) => {
   const ref = useRef(null);
   const closeRef = useRef(null);
 
-  const [note, setNote] = useState({title: "", description: "", start_date: "", end_date:""});
+  const [note, setNote] = useState({title: "", description: "", start_date: new Date().toISOString().split('T')[0], end_date:new Date().toISOString().split('T')[0]});
 
   const updateNote = (note) => {
     ref.current.click();
@@ -91,6 +93,7 @@ const Notes = (props) => {
                     name="title"
                     value={note.title}
                     onChange={handleOnchange}
+                    required
                   />
                 </div>
                 <div className="mb-3">
@@ -104,34 +107,21 @@ const Notes = (props) => {
                     name="description"
                     value={note.description}
                     onChange={handleOnchange}
+                    required
                   />
                 </div>
                 <div className="mb-3">
                   <label htmlFor="start_date" className="form-label">
                     Start Date
                   </label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="start_date"
-                    name="start_date"
-                    value={note.start_date}
-                    onChange={handleOnchange}
-                  />
+                  <DatePicker minDate={new Date()}  selected={new Date(note.start_date)} onChange={(date) => setNote({...note, start_date: date.toISOString().split('T')[0]})} />
                 </div>
 
                 <div className="mb-3">
                   <label htmlFor="start_date" className="form-label">
                     End Date
                   </label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="end_date"
-                    name="end_date"
-                    value={note.end_date}
-                    onChange={handleOnchange}
-                  />
+                  <DatePicker minDate={new Date(note.start_date)}  selected={new Date(note.end_date)} onChange={(date) => setNote({...note, end_date: date.toISOString().split('T')[0]})} />
                 </div>
 
               </form>
