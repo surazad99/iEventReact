@@ -15,3 +15,8 @@ code {
 i{
   cursor: pointer;
 }
+
+.react-datepicker__day.react-datepicker__day--keyboard-selected {
+  background: none;
+  color: black;
+}

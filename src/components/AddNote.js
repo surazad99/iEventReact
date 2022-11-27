@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import noteContext from "../context/noteContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -7,6 +7,7 @@ const AddNote = (props) => {
   const context = useContext(noteContext);
   const { notes, setNotes, addNote } = context;
   const [note, setNote] = useState({title: "", description: "", start_date: new Date().toISOString().split('T')[0], end_date: new Date().toISOString().split('T')[0]});
+ 
   const handleSubmit = async (event) => {
     event.preventDefault();
     const response = await addNote(note.title, note.description, note.start_date, note.end_date);
@@ -27,7 +28,6 @@ const AddNote = (props) => {
       setNote({...note, [event.target.name]: event.target.value});
   }
 
-
   return (
     <div>
       <h2 className="my-3"> Add your Events</h2>
@@ -45,7 +45,7 @@ const AddNote = (props) => {
               name="title"
               onChange={handleOnchange}
               value={note.title}
-              required
+              // required
             />
             </div>
           </div>
@@ -61,7 +61,7 @@ const AddNote = (props) => {
               name="description"
               onChange={handleOnchange}
               value={note.description}
-              required
+           
 
             />
             </div>
