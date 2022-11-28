@@ -10,7 +10,7 @@ const Notes = (props) => {
   const context = useContext(noteContext);
   const { notes, getNotes, editNote } = context;
   const navigate = useNavigate();
-
+  const [err, setErr] = useState({});
   useEffect(()  => {
 
     async function fetchData(){
@@ -41,10 +41,14 @@ const Notes = (props) => {
     event.preventDefault();
     const response = await editNote(note.id, note.title, note.description, note.start_date, note.end_date);
     const responseJson = await response.json();
+    console.log(responseJson);
     if(response.status===200){
       props.showAlert('success', responseJson.message);
+      closeRef.current.click();
+    }else if(response.status === 422){
+      setErr(responseJson.errors);
+      // props.showAlert('danger', responseJson.message);
     }
-    closeRef.current.click();
 
   };
 
@@ -54,6 +58,10 @@ const Notes = (props) => {
 
   const handleFilter = (event) => {
     getNotes(event.target.value);
+  }
+
+  const handleModalClose = () => {
+    setErr({});
   }
 
   return (
@@ -87,6 +95,7 @@ const Notes = (props) => {
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
+                onClick={handleModalClose}
               ></button>
             </div>
             <div className="modal-body">
@@ -104,6 +113,8 @@ const Notes = (props) => {
                     onChange={handleOnchange}
                     required
                   />
+                  <p style={{ display: 'title' in err ? 'flex' : 'none', color : "red" }} >{'title' in err ? err.title[0]: ''}</p>
+
                 </div>
                 <div className="mb-3">
                   <label htmlFor="description" className="form-label">
@@ -118,12 +129,16 @@ const Notes = (props) => {
                     onChange={handleOnchange}
                     required
                   />
+                  <p style={{ display: 'description' in err ? 'flex' : 'none', color : "red" }} >{'description' in err ? err.description[0]: ''}</p>
+
                 </div>
                 <div className="mb-3">
                   <label htmlFor="start_date" className="form-label">
                     Start Date
                   </label>
                   <DatePicker minDate={new Date()}  selected={new Date(note.start_date)} onChange={(date) => setNote({...note, start_date: date.toISOString().split('T')[0]})} />
+                  <p style={{ display: 'start_date' in err ? 'flex' : 'none', color : "red" }} >{'start_date' in err ? err.start_date[0]: ''}</p>
+                
                 </div>
 
                 <div className="mb-3">
@@ -131,6 +146,8 @@ const Notes = (props) => {
                     End Date
                   </label>
                   <DatePicker minDate={new Date(note.start_date)}  selected={new Date(note.end_date)} onChange={(date) => setNote({...note, end_date: date.toISOString().split('T')[0]})} />
+                  <p style={{ display: 'end_date' in err ? 'flex' : 'none', color : "red" }} >{'end_date' in err ? err.end_date[0]: ''}</p>
+                
                 </div>
 
               </form>
@@ -141,6 +158,7 @@ const Notes = (props) => {
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
                 ref={closeRef}
+                onClick={handleModalClose}
               >
                 Close
               </button>

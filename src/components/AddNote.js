@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext} from "react";
 import noteContext from "../context/noteContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -7,7 +7,7 @@ const AddNote = (props) => {
   const context = useContext(noteContext);
   const { notes, setNotes, addNote } = context;
   const [note, setNote] = useState({title: "", description: "", start_date: new Date().toISOString().split('T')[0], end_date: new Date().toISOString().split('T')[0]});
- 
+  const [err, setErr] = useState({});
   const handleSubmit = async (event) => {
     event.preventDefault();
     const response = await addNote(note.title, note.description, note.start_date, note.end_date);
@@ -24,6 +24,7 @@ const AddNote = (props) => {
       setNote({title: "", description: "", start_date: new Date().toISOString().split('T')[0], end_date:new Date().toISOString().split('T')[0]});
 
     }else if(response.status === 422){
+      setErr(apiResponse.errors);
       props.showAlert('danger', apiResponse.message);
     }else{
       props.showAlert('danger', apiResponse.message);
@@ -53,6 +54,7 @@ const AddNote = (props) => {
               value={note.title}
               required = "required"
             />
+            <p style={{ display: 'title' in err ? 'flex' : 'none', color : "red" }} >{'title' in err ? err.title[0]: ''}</p>
             </div>
           </div>
           <div className="col-md-6">
@@ -70,6 +72,8 @@ const AddNote = (props) => {
               required
 
             />
+            <p style={{ display: 'description' in err ? 'flex' : 'none', color : "red" }} >{'description' in err ? err.description[0]: ''}</p>
+
             </div>
           </div>
 
@@ -79,6 +83,8 @@ const AddNote = (props) => {
               Start Date
             </label>
             <DatePicker required minDate={new Date()} selected={new Date(note.start_date)} onChange={(date) => setNote({...note, start_date: date.toISOString().split('T')[0]})} />
+            <p style={{ display: 'start_date' in err ? 'flex' : 'none', color : "red" }} >{'start_date' in err ? err.start_date[0]: ''}</p>
+            
             </div>
           </div>
           <div className="col-md-6">
@@ -87,6 +93,8 @@ const AddNote = (props) => {
               End Date
             </label>
             <DatePicker required minDate={new Date(note.start_date)}  selected={new Date(note.end_date)} onChange={(date) => setNote({...note, end_date: date.toISOString().split('T')[0]})} />
+            <p style={{ display: 'end_date' in err ? 'flex' : 'none', color : "red" }} >{'end_date' in err ? err.end_date[0]: ''}</p>
+            
             </div>
           </div>
         </div>

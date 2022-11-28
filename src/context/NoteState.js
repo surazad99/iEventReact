@@ -65,8 +65,8 @@ const NoteState = (props) => {
         }
       }
       setNotes(newNotes);
-      return response;
     }
+    return response;
   };
   //Delete Note
   const deleteNote = async (id) => {
