@@ -13,7 +13,13 @@ const AddNote = (props) => {
     const response = await addNote(note.title, note.description, note.start_date, note.end_date);
     const apiResponse = await response.json();
     if(response.status === 200){
-      setNotes(notes.concat(apiResponse.data));
+      let newNotes = notes.concat(apiResponse.data);
+      newNotes = newNotes.sort((a, b) => {
+        let da = new Date(a.start_date),
+            db = new Date(b.start_date);
+        return da - db;
+    });
+      setNotes(newNotes);
       props.showAlert('success', apiResponse.message);
       setNote({title: "", description: "", start_date: new Date().toISOString().split('T')[0], end_date:new Date().toISOString().split('T')[0]});
 
@@ -45,7 +51,7 @@ const AddNote = (props) => {
               name="title"
               onChange={handleOnchange}
               value={note.title}
-              // required
+              required = "required"
             />
             </div>
           </div>
@@ -61,7 +67,7 @@ const AddNote = (props) => {
               name="description"
               onChange={handleOnchange}
               value={note.description}
-           
+              required
 
             />
             </div>
@@ -72,7 +78,7 @@ const AddNote = (props) => {
             <label htmlFor="start_date" className="form-label">
               Start Date
             </label>
-            <DatePicker  minDate={new Date()} selected={new Date(note.start_date)} onChange={(date) => setNote({...note, start_date: date.toISOString().split('T')[0]})} />
+            <DatePicker required minDate={new Date()} selected={new Date(note.start_date)} onChange={(date) => setNote({...note, start_date: date.toISOString().split('T')[0]})} />
             </div>
           </div>
           <div className="col-md-6">
@@ -80,7 +86,7 @@ const AddNote = (props) => {
             <label htmlFor="end_date" className="form-label">
               End Date
             </label>
-            <DatePicker minDate={new Date(note.start_date)}  selected={new Date(note.end_date)} onChange={(date) => setNote({...note, end_date: date.toISOString().split('T')[0]})} />
+            <DatePicker required minDate={new Date(note.start_date)}  selected={new Date(note.end_date)} onChange={(date) => setNote({...note, end_date: date.toISOString().split('T')[0]})} />
             </div>
           </div>
         </div>
